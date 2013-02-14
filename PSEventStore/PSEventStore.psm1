@@ -25,7 +25,7 @@
 
 . $PSScriptRoot\Get-ESStatistics.ps1
 
-Import-Module PSCompletion -ErrorAction SilentlyContinue
+Import-Module PSCompletion -Global -ErrorAction SilentlyContinue
 
 if (Get-Module PSCompletion -ErrorAction SilentlyContinue) {
 . $PSScriptRoot\PSCompletion.ps1
