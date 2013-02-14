@@ -40,6 +40,9 @@ function New-ESProjection {
         [EventStore.ProjectionMode]$Mode,
         [Parameter(Position=2)]
         [string]$Query,
+        [switch]$Enabled = $true,
+        [switch]$Emit,
+        [switch]$Checkpoints,
         [string]$Store = $Global:Store
     )
 
@@ -48,9 +51,12 @@ function New-ESProjection {
            OneTime { $m = 'oneTime'}
            Continuous { $m = 'continuous' }
         }
-        $r = Invoke-WebRequest ("$Store/projections/$m" + "?name=$Name&type=JS") -Method Post -Body $Query
+        $en = if ($Enabled) { 'yes' } else { 'no' }
+        $e = if ($Emit) { 'yes' } else { 'no' }
+        $c = if ($Checkpoints) { 'yes' } else { 'no' }
+        $r = Invoke-WebRequest ("$Store/projections/$m" + "?name=$Name&type=JS&emit=$e&checkpoints=$c&enabled=$en") -Method Post -Body $Query
         $uri = $r.Headers['Location']
         
-        Get-ESProjection -Uri $uri
+        Get-ESProjection -StatusUrl $uri
     }
 }
