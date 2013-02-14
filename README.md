@@ -1,7 +1,9 @@
 PSEventStore
 ============
 
-A powershell module for the EventStore
+A powershell module for the EventStore.
+
+Get the EventStore at http://geteventstore.com
 
 __Installation__
 
@@ -122,5 +124,26 @@ To delete a projection:
 
     PS> Remove-ESProjection name
 
+__Statistics__
+
+You can query the EventStore statistics with:
+
+    PS> Get-ESStatistics
+    
+There's a bunch of options to get more precise stats:
+
+    PS> Get-ESStatistics Processor
+
+Here's the whole list:
+        All
+        Processor
+        ProcessorDiskIO
+        ProcessorTcp
+        ProcessorGc
+        System
+        SystemDrive
+        EventStore
+        EventStoreQueue
+        EventStoreReadIndex
 
 Have fun !
