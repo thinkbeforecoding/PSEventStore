@@ -13,7 +13,7 @@ namespace EventStore {
         EventStoreReadIndex
     }
 }
-'@
+'@ -ErrorAction SilentlyContinue
 
 
 function Get-ESStatistics {

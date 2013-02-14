@@ -1,4 +1,4 @@
-﻿Add-Type -TypeDefinition "namespace EventStore { public enum ProjectionMode { OneTime, Continuous } }"
+﻿Add-Type -TypeDefinition "namespace EventStore { public enum ProjectionMode { OneTime, Continuous } }" -ErrorAction SilentlyContinue
 
 function New-ESProjection {
      <#
