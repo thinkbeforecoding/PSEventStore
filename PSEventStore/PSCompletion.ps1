@@ -2,7 +2,7 @@
 $streamCompleter = {
     param($CommandName, $ParameterName, $WordToComplete, $ast, $fakeParameters)
 
-    Get-Streams -Count 500 | ? { $_.Stream -like "$WordToComplete*" } `    | % { New-CompletionResult $_.Stream }
+    Get-ESStream -Count 500 | ? { $_.Stream -like "$WordToComplete*" } `    | % { New-CompletionResult $_.Stream }
 }
 
 
