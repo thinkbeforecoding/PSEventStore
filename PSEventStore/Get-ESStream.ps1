@@ -36,7 +36,7 @@
     end {
         Get-ESEvent '$streams' -Start $Start -Count $Count -Store $Store -RefOnly `
         | % { 
-            $data = Get-EventData $_
+            $data = $_ | Get-ESEvent 
             $_ | Add-Member NoteProperty -Name Stream -Value $data.eventStreamid
             $_ | Add-Member ScriptProperty -Name LastChange  -Value { [datetime]$this.updated } 
             $_ } `        | ? { $_.Stream -notlike '$*' -or $IncludeSystemStreams } `
