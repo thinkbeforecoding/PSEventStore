@@ -23,6 +23,8 @@
 . $PSScriptRoot\New-ESQuery.ps1
 . $PSScriptRoot\Invoke-ESQuery.ps1
 
+. $PSScriptRoot\Get-ESStatistics.ps1
+
 if (Import-Module PSCompletion -ErrorAction SilentlyContinue) {
 . $PSScriptRoot\PSCompletion.ps1
 }

@@ -74,6 +74,7 @@ FunctionsToExport = @(
 'Get-ESProjectionState'
 'New-ESQuery'
 'Invoke-ESQuery'
+'Get-ESStatistics'
 )
 
 # Cmdlets to export from this module
