@@ -13,6 +13,22 @@ Import module:
 
 You can manage the module folders with the $env:PSModulePath variable.
 
+__Quick installation with PSGet__
+
+Install PSGet:
+
+    PS> iwr http://psget.net/GetPsGet.ps1 | iex
+    
+Install PSCompletion:
+
+    PS> Install-Module -ModuleUrl https://github.com/thinkbeforecoding/PSCompletion/archive/master.zip
+
+Install PSEventStore:
+
+    PS> Install-Module -ModuleUrl https://github.com/thinkbeforecoding/PSEventStore/archive/master.zip
+
+You're done !
+
 __Usage__
 
 Set your default EventStore by setting the $global:store variable.
