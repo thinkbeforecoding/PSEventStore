@@ -80,11 +80,15 @@
                 }
             }
             Event {
+                $ProgressPreference = "SilentlyContinue";
+
                 $link = $event.links | ? relation -EQ alternate | ? type -eq 'application/json' | % uri
                 Invoke-RestMethod $link | Set-PSType EventStore.Event | % { 
                     $_ | Add-Member ScriptProperty -Name Stream -Value { $this.eventStreamId }
                     $_ | Add-Member ScriptProperty -Name Version -Value { $this.eventNumber }
                     $_
+                $ProgressPreference = "Continue";
+
                 }
             }
         }
