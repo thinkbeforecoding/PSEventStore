@@ -9,6 +9,9 @@
         .PARAMETER Stream
         The stream name.
 
+        .PARAMETER All
+        When specified, returns last events from all streams.
+
         .PARAMETER Start
         The first event in the stream, or -1 to start from last event.
 
@@ -39,9 +42,12 @@
         [Alias('EventStreamId')]
         [Alias('Name')]
         [string]$Stream,
+        [Parameter(Position=0,ParameterSetName="All")]
+        [switch]$All,
         [Parameter(Position=1, ParameterSetName="Stream")]
         [int]$Start = -1,
         [Parameter(Position=2, ParameterSetName="Stream")]
+        [Parameter(Position=2, ParameterSetName="All")]
         [int]$Count = 20,
         [Parameter(ParameterSetName="Stream")]
         [switch]$RefOnly,
@@ -80,6 +86,33 @@
                     }
                     $cnt = $cnt - 20
                 }
+            }
+            All {
+                $cnt = $Count
+                $c = [Math]::Min(20,$cnt)
+                $url = "$store/streams/`$all/$cnt" + "?embed=yes&format=json"
+                $r = Invoke-RestMethod $url 
+        
+                if ($RefOnly) {
+                    $r.entries | Set-PSType EventStore.EventRef
+                } else {
+                    $r.entries | Get-ESEvent
+                }
+
+                $cnt = $cnt - 20
+                while ($cnt -gt 0) {
+                    $next = $r.links | ? relation -eq next | % uri
+                    if (!$next) { return }
+            
+                    $r = Invoke-RestMethod ($next+"?format=json") 
+                    if ($RefOnly) {
+                        $r.entries | select -First $cnt | Set-PSType EventStore.EventRef
+                    } else {
+                        $r.entries | select -First $cnt | Get-ESEvent
+                    }
+                    $cnt = $cnt - 20
+                }
+
             }
             Event {
                 $ProgressPreference = "SilentlyContinue";
