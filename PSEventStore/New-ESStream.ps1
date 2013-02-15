@@ -33,7 +33,8 @@
         [string]$Name,
         [Parameter(Position = 1)]
         $MetaData = @{},
-        [switch]$PassThru
+        [switch]$PassThru,
+        [string]$Store = $Global:Store
     )
 
     process {
