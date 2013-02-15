@@ -18,11 +18,7 @@ function New-ESProjection {
         The js query definition. Use completion to cycle through query templates.
 
         .PARAMETER Store
-        The base url of the event store to use.
-
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
+        The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
         .LINK
         Get-ESProjection
@@ -43,7 +39,7 @@ function New-ESProjection {
         [switch]$Enabled = $true,
         [switch]$Emit,
         [switch]$Checkpoints,
-        [string]$Store = $Global:Store
+        [string]$Store
     )
 
     end {
@@ -54,7 +50,8 @@ function New-ESProjection {
         $en = if ($Enabled) { 'yes' } else { 'no' }
         $e = if ($Emit) { 'yes' } else { 'no' }
         $c = if ($Checkpoints) { 'yes' } else { 'no' }
-        $r = Invoke-WebRequest ("$Store/projections/$m" + "?name=$Name&type=JS&emit=$e&checkpoints=$c&enabled=$en") -Method Post -Body $Query
+        $base = Get-ESRemote $Store
+        $r = Invoke-WebRequest ("$base/projections/$m" + "?name=$Name&type=JS&emit=$e&checkpoints=$c&enabled=$en") -Method Post -Body $Query
         $uri = $r.Headers['Location']
         
         Get-ESProjection -StatusUrl $uri

@@ -62,6 +62,9 @@ NestedModules = @()
 
 # Functions to export from this module
 FunctionsToExport = @(
+'Get-ESRemote'
+'Set-ESRemote'
+'Remove-ESRemote'
 'Get-ESEvent'
 'New-ESEvent'
 'Write-ESEvent'

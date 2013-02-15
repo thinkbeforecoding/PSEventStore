@@ -31,11 +31,8 @@ function Get-ESStatistics {
         The optional argument for SystemDrive and EventStoreQueue
 
         .PARAMETER Store
-        The base url of the event store to use.
+        The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
     #>
      
     [CmdletBinding()]
@@ -44,7 +41,7 @@ function Get-ESStatistics {
         [EventStore.Statistics] $Statistic = [EventStore.Statistics]::All,
         [Parameter(Position=1)]
         [string]$Arg,
-        [string]$Store = $Global:Store
+        [string]$Store
     )
 
     end {
@@ -61,7 +58,8 @@ function Get-ESStatistics {
         EventStoreReadIndex { $p = 'es/readindex' }
         }
 
-        Invoke-RestMethod $Store/stats/$p
+        $base = Get-ESRemote $Store
+        Invoke-RestMethod $base/stats/$p
     }
 
 }

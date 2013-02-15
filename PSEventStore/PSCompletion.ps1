@@ -11,7 +11,7 @@ $projectionCompleter = {
 
     $store = $fakeBoundParameter['Store']
     if (!$store) {
-        $store = $Global:store;
+        $store = Get-ESRemote;
     }
     Get-ESProjection -Name "$wordToComplete*" -Store $store `
     | % { New-CompletionResult $_.Name }
@@ -95,6 +95,13 @@ New-CompletionResult (@'
 
 }
 
+$remoteCompleter = {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+    Get-ESRemote "$wordToComplete*" -ListAvailable `
+    | % { New-CompletionResult $_.Name -ToolTip $_.Value }
+}
+
 Register-ParameterCompleter Get-ESEvent Stream $streamCompleter
 Register-ParameterCompleter Write-ESEvent Stream $streamCompleter
 Register-ParameterCompleter Remove-ESStream Name $streamCompleter
@@ -112,3 +119,6 @@ Register-ParameterCompleter Set-ESProjectionQuery Query $queryCompleter
 Register-ParameterCompleter New-ESProjection Query $queryCompleter
 Register-ParameterCompleter New-ESQuery Query $queryCompleter
 Register-ParameterCompleter Execute-ESQuery Query $queryCompleter
+
+Register-ParameterCompleter Get-ESRemote Name $remoteCompleter
+Register-ParameterCompleter Remove-ESRemote Name $remoteCompleter

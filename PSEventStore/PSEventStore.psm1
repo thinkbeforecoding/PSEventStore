@@ -1,9 +1,10 @@
-﻿if (!$global:store) {
-    $global:store = "http://127.0.0.1:2113"
-}
-
+﻿
 . $PSScriptRoot\Set-PSType.ps1
 . $PSScriptRoot\Remove-PSType.ps1
+
+. $PSScriptRoot\Get-ESRemote
+. $PSScriptRoot\Set-ESRemote
+. $PSScriptRoot\Remove-ESRemote
 
 . $PSScriptRoot\Get-ESEvent.ps1
 . $PSScriptRoot\New-ESEvent.ps1

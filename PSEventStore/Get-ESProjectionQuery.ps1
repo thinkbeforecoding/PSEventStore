@@ -13,11 +13,7 @@
         The projection name.
 
         .PARAMETER Store
-        The base url of the event store to use.
-
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
+         The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
         .LINK
         New-ESProjection
@@ -35,7 +31,7 @@
         [Parameter(Position=0, Mandatory, ParameterSetName = "Name")]
         [string]$Name,
         [Parameter(ParameterSetName = "Name")]
-        [string]$Store = $Global:Store
+        [string]$Store
     )
     process {
         switch($PSCmdlet.ParameterSetName) {

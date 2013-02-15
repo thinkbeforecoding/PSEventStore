@@ -16,11 +16,7 @@
         The polling interval to get next state and show it if ShowProgress is specified.
 
         .PARAMETER Store
-        The base url of the event store to use.
-
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
+        The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
         .LINK
         New-ESQuery
@@ -31,7 +27,7 @@
         [string]$Query,
         [switch]$ShowProgress,
         [int]$PollInterval = 500,
-        [string]$Store = $Global:Store
+        [string]$Store
         )
 
     end {

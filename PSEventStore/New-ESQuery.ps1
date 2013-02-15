@@ -14,11 +14,7 @@
         Start the query in disabled mode.
 
         .PARAMETER Store
-        The base url of the event store to use.
-
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
+        The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
         .LINK
         Get-ESProjectionState
@@ -30,11 +26,12 @@
         [Parameter(Position=0, Mandatory)]
         [string]$Query,
         [switch]$Disabled,
-        [string]$Store = $Global:Store
+        [string]$Store
     )
     end {
         try {
-            $r = Invoke-WebRequest "$Store/projections/transient?emit=no&checkpoints=no&enabled=$(if ($Disabled) { "no"} else { "yes" })" -Method POST -Body $Query -ErrorAction Stop
+            $base = Get-ESRemote $Store
+            $r = Invoke-WebRequest "$base/projections/transient?emit=no&checkpoints=no&enabled=$(if ($Disabled) { "no"} else { "yes" })" -Method POST -Body $Query -ErrorAction Stop
 
             $url = $r.Headers['Location']
             Get-ESProjection -StatusUrl $url

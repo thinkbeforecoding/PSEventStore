@@ -14,11 +14,7 @@
         -2 for any, this is the default.
 
         .PARAMETER Store
-        The base url of the event store to use.
-
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
+        The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
         .LINK
         Get-ESEvent
@@ -30,7 +26,7 @@
         [Parameter(Mandatory, Position = 0)]
         [string]$Name,
         [int]$ExpectedVersion = -2,
-        [string]$Store = $Global:Store
+        [string]$Store
     )
 
     process {
@@ -39,7 +35,8 @@
         }
 
         $body = (ConvertTo-Json $payload -Depth ([int]::MaxValue))
-        Invoke-WebRequest $Store/streams/$Name -Method Delete -ContentType "application/json" -Body $body | Out-Null
+        $base = Get-ESRemote $Store
+        Invoke-WebRequest $base/streams/$Name -Method Delete -ContentType "application/json" -Body $body | Out-Null
     }
 
 

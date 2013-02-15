@@ -22,14 +22,10 @@
         Returns only the reference to events and not events themselves.
 
         .PARAMETER Store
-        The base url of the event store to use.
+        The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
         .PARAMETER Event
-        The envet reference for which to fetch data.
-
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
+        The event reference for which to fetch data.
 
         .LINK
         Get-ESStream
@@ -52,7 +48,8 @@
         [Parameter(ParameterSetName="Stream")]
         [switch]$RefOnly,
         [Parameter(ParameterSetName="Stream")]
-        [string]$Store = $global:store,
+        [Parameter(ParameterSetName="All")]
+        [string]$Store,
         [Parameter(ValueFromPipeline, ParameterSetName="Event")]
         $Event,
         [Parameter(ParameterSetName="Url")]
@@ -64,7 +61,9 @@
             Stream {
                 $cnt = $Count
                 $c = [Math]::Min(20,$cnt)
-                $url = "$store/streams/$Stream/range/$start/$c"
+
+                $base = Get-ESRemote $Store
+                $url = "$base/streams/$Stream/range/$start/$c"
                 $r = Invoke-RestMethod ($url+"?format=json") 
         
                 if ($RefOnly) {
@@ -90,7 +89,8 @@
             All {
                 $cnt = $Count
                 $c = [Math]::Min(20,$cnt)
-                $url = "$store/streams/`$all/$cnt" + "?embed=yes&format=json"
+                $base = Get-ESRemote $Store
+                $url = "$base/streams/`$all/$cnt" + "?embed=yes&format=json"
                 $r = Invoke-RestMethod $url 
         
                 if ($RefOnly) {

@@ -24,11 +24,7 @@
         If set, the created EventRef is returned.
 
         .PARAMETER Store
-        The base url of the event store to use.
-
-        .NOTES
-        When not specified, the default value for $Store is $global:Store.
-        Define $global:Store default value in profile to access it by default.
+        The base url of the event store to use, or the remote name configured with Set-ESRemote.
 
         .LINK
         Get-ESEvent
@@ -43,7 +39,7 @@
         [Guid]$CommitId = [Guid]::NewGuid(),
         [int]$ExpectedVersion = -2,
         [switch]$PassThru,
-        [string]$Store = $Global:Store
+        [string]$Store
     )
 
     begin {
@@ -61,7 +57,8 @@
             ExpectedVersion = $ExpectedVersion    
         }
         $body = (ConvertTo-Json $payload -Depth ([int]::MaxValue))
-        $r = Invoke-WebRequest $Store/streams/$Stream -Method Post -ContentType "application/json" -Body $body #| Out-Null
+        $base = Get-ESRemote $Store
+        $r = Invoke-WebRequest $base/streams/$Stream -Method Post -ContentType "application/json" -Body $body #| Out-Null
     
         if ($PassThru) {
             $url = $r.Headers['Location']
