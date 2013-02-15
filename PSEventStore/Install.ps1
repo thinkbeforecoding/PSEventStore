@@ -1,0 +1,1 @@
+﻿Install-Module -ModuleUrl https://github.com/thinkbeforecoding/PSCompletion/archive/master.zip
