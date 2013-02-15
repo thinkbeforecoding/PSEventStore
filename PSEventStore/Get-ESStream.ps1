@@ -12,9 +12,6 @@
         .PARAMETER Count
         Indicates
 
-        .PARAMETER PollInterval
-        The polling interval to get next state and show it if ShowProgress is specified.
-
         .PARAMETER Store
         The base url of the event store to use.
 
