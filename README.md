@@ -51,6 +51,19 @@ Get a stream events :
 Get a stream events references:
 
     PS> Get-ESEvent stream -RefOnly
+    
+To create and send an event:
+
+    PS> New-ESEvent SomethingHappened @{Value = 42} | Write-ESEvent stream
+
+To create a new stream explicitly:
+
+    PS> New-ESStream newstream -MetaData @{MaxAge = 100000}
+
+To delete a stream:
+
+    PS> Remove-ESStream stream
+
 
 __Executing queries__
 
