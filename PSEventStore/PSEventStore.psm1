@@ -9,6 +9,8 @@
 . $PSScriptRoot\New-ESEvent.ps1
 . $PSScriptRoot\Write-ESEvent.ps1
 . $PSScriptRoot\Get-ESStream.ps1
+. $PSScriptRoot\New-ESStream.ps1
+
 
 . $PSScriptRoot\Get-ESProjection.ps1
 . $PSScriptRoot\New-ESProjection.ps1

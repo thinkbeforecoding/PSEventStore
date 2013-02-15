@@ -66,6 +66,7 @@ FunctionsToExport = @(
 'New-ESEvent'
 'Write-ESEvent'
 'Get-ESStream'
+'New-ESStream'
 'Get-ESProjection'
 'New-ESProjection'
 'Remove-ESProjection'
