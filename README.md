@@ -21,13 +21,11 @@ Install PSGet:
 
     PS> iwr http://psget.net/GetPsGet.ps1 | iex
     
-Install PSCompletion:
-
-    PS> Install-Module -ModuleUrl https://github.com/thinkbeforecoding/PSCompletion/archive/master.zip
-
 Install PSEventStore:
 
     PS> Install-Module -ModuleUrl https://github.com/thinkbeforecoding/PSEventStore/archive/master.zip
+
+PsCompletion will be installed automaticaly by PSEventStore installation.
 
 You're done !
 
