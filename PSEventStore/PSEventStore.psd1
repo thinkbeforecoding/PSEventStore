@@ -63,6 +63,8 @@ NestedModules = @()
 # Functions to export from this module
 FunctionsToExport = @(
 'Get-ESEvent'
+'New-ESEvent'
+'Write-ESEvent'
 'Get-ESStream'
 'Get-ESProjection'
 'New-ESProjection'

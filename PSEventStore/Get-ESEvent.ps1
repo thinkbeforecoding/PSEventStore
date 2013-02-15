@@ -48,7 +48,9 @@
         [Parameter(ParameterSetName="Stream")]
         [string]$Store = $global:store,
         [Parameter(ValueFromPipeline, ParameterSetName="Event")]
-        $Event
+        $Event,
+        [Parameter(ParameterSetName="Url")]
+        $Url
     )
 
     process {
@@ -90,6 +92,13 @@
                 $ProgressPreference = "Continue";
 
                 }
+            }
+            Url {
+                $ProgressPreference = "SilentlyContinue";
+
+                Invoke-RestMethod $url | % entry | Set-PSType EventStore.EventRef
+                $ProgressPreference = "Continue";
+                
             }
         }
     }
