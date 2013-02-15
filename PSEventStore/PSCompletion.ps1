@@ -98,6 +98,7 @@ New-CompletionResult (@'
 Register-ParameterCompleter Get-ESStream Name $streamCompleter
 Register-ParameterCompleter Get-ESEvent Stream $streamCompleter
 Register-ParameterCompleter Write-ESEvent Stream $streamCompleter
+Register-ParameterCompleter Remove-ESStream Name $streamCompleter
 
 Register-ParameterCompleter Get-ESProjectionState Name $projectionCompleter
 Register-ParameterCompleter Get-ESProjection Name $projectionCompleter

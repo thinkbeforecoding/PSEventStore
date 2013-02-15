@@ -10,6 +10,7 @@
 . $PSScriptRoot\Write-ESEvent.ps1
 . $PSScriptRoot\Get-ESStream.ps1
 . $PSScriptRoot\New-ESStream.ps1
+. $PSScriptRoot\Remove-ESStream.ps1
 
 
 . $PSScriptRoot\Get-ESProjection.ps1
