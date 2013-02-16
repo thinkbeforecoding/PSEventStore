@@ -135,6 +135,39 @@ To delete a projection:
 
     PS> Remove-ESProjection name
 
+__Remotes__
+
+By default, all operations are done on the event store at http://127.0.0.1:2113
+You can manage several servers (including default one) with remotes.
+
+To get a list of remotes :
+
+    PS> Get-ESRemote -ListAvailable
+    
+To set a remote :
+
+    PS> Set-ESRemote Prod http://myprodserver:2113
+    
+You can the use Prod as an alias in every other command that takes -Store parameter :
+
+    PS> Get-ESEvent -All -Store Prod
+    
+This will return all events from the event store at http://myprodserver:2113
+
+You can of course set a new value for Default that will be used when no -Store parameter is specified.
+
+To remove a registered remote :
+
+    PS> Remove-ESRemote Prod
+    
+This will remove the specified alias.
+
+You can still pass a full address to the -Store parameter for servers that are not registered:
+
+    PS> Get-ESEvent -All http://otherserver:2113
+
+You can use completion on all -Store parameters, it will suggest registered remotes.
+
 __Statistics__
 
 You can query the EventStore statistics with:
