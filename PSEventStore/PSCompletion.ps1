@@ -122,3 +122,21 @@ Register-ParameterCompleter Execute-ESQuery Query $queryCompleter
 
 Register-ParameterCompleter Get-ESRemote Name $remoteCompleter
 Register-ParameterCompleter Remove-ESRemote Name $remoteCompleter
+
+
+Register-ParameterCompleter Get-ESEvent Store $remoteCompleter
+Register-ParameterCompleter Write-ESEvent Store $remoteCompleter
+Register-ParameterCompleter Get-ESStream Store $remoteCompleter
+Register-ParameterCompleter New-ESStream Store $remoteCompleter
+Register-ParameterCompleter Remove-ESStream Store $remoteCompleter
+Register-ParameterCompleter Get-ESProjection Store $remoteCompleter
+Register-ParameterCompleter New-ESProjection Store $remoteCompleter
+Register-ParameterCompleter Remove-ESProjection Store $remoteCompleter
+Register-ParameterCompleter Disable-ESProjection Store $remoteCompleter
+Register-ParameterCompleter Enable-ESProjection Store $remoteCompleter
+Register-ParameterCompleter Get-ESProjectionQuery Store $remoteCompleter
+Register-ParameterCompleter Set-ESProjectionQuery Store $remoteCompleter
+Register-ParameterCompleter Get-ESProjectionState Store $remoteCompleter
+Register-ParameterCompleter New-ESQuery Store $remoteCompleter
+Register-ParameterCompleter Invoke-ESQuery Store $remoteCompleter
+Register-ParameterCompleter Get-ESStatistics Store $remoteCompleter
