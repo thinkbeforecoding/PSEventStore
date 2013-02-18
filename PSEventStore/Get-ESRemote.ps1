@@ -6,13 +6,16 @@ if (!$global:ESRemotes) {
 
     $global:ESRemotes = @{}
 
-    $remotes = Get-Content $global:ESRemoteFile | Out-String |  ConvertFrom-Json 
-    $remotes | Get-Member -MemberType NoteProperty `
-    | % { 
-        $n = $_.Name
-        $global:ESRemotes[$n] = $remotes.$n
+    if (Test-Path $global:ESRemoteFile) {
+        $remotes = Get-Content $global:ESRemoteFile | Out-String |  ConvertFrom-Json 
+        $remotes | Get-Member -MemberType NoteProperty `
+        | % { 
+            $n = $_.Name
+            $global:ESRemotes[$n] = $remotes.$n
+        }
+    } else {
+        $global:ESRemotes['Default'] = 'http://127.0.0.1:2113'
     }
-    
 }
 
 function Get-ESRemote {
