@@ -32,7 +32,7 @@
     #>
 
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName="Stream")]
     param(
         [Parameter(Position = 0, ParameterSetName="Stream")]
         [Alias('EventStreamId')]
@@ -40,15 +40,21 @@
         [string]$Stream,
         [Parameter(Position=0,ParameterSetName="All")]
         [switch]$All,
+        [Parameter(Position=0,ParameterSetName="Category")]
+        [string]$Category,
         [Parameter(Position=1, ParameterSetName="Stream")]
         [int]$Start = -1,
         [Parameter(Position=2, ParameterSetName="Stream")]
         [Parameter(Position=2, ParameterSetName="All")]
+        [Parameter(Position=2, ParameterSetName="Category")]
         [int]$Count = 20,
+        [Parameter(ParameterSetName="Stream")]
+        [switch]$Forward,
         [Parameter(ParameterSetName="Stream")]
         [switch]$RefOnly,
         [Parameter(ParameterSetName="Stream")]
         [Parameter(ParameterSetName="All")]
+        [Parameter(ParameterSetName="Category")]
         [string]$Store,
         [Parameter(ValueFromPipeline, ParameterSetName="Event")]
         $Event,
@@ -65,25 +71,43 @@
                 $base = Get-ESRemote $Store
                 $url = "$base/streams/$Stream/range/$start/$c"
                 $r = Invoke-RestMethod ($url+"?format=json") 
-        
-                if ($RefOnly) {
-                    $r.entries | Set-PSType EventStore.EventRef
-                } else {
-                    $r.entries | Get-ESEvent
-                }
 
-                $cnt = $cnt - 20
-                while ($cnt -gt 0) {
-                    $next = $r.links | ? relation -eq next | % uri
-                    if (!$next) { return }
+                if ($Forward) {
+                    $next = $next = $r.links | ? relation -eq last | % uri
+                    while ($cnt -gt 0) {
+                        $r = Invoke-RestMethod ($next+"?format=json") 
+                        if ($RefOnly) {
+                            $r.entries[-1..(0 - $r.entries.Length)] | select -First $cnt | Set-PSType EventStore.EventRef
+                        } else {
+                            $r.entries[-1..(0 - $r.entries.Length)] | select -First $cnt | Get-ESEvent
+                        }
+
+                        $next = $r.links | ? relation -eq previous | % uri
+                        if (!$next) { return }
             
-                    $r = Invoke-RestMethod ($next+"?format=json") 
-                    if ($RefOnly) {
-                        $r.entries | select -First $cnt | Set-PSType EventStore.EventRef
-                    } else {
-                        $r.entries | select -First $cnt | Get-ESEvent
+                        $cnt = $cnt - 20
                     }
+
+                } else {        
+                    if ($RefOnly) {
+                        $r.entries | Set-PSType EventStore.EventRef
+                    } else {
+                        $r.entries | Get-ESEvent
+                    }
+
                     $cnt = $cnt - 20
+                    while ($cnt -gt 0) {
+                        $next = $r.links | ? relation -eq next | % uri
+                        if (!$next) { return }
+            
+                        $r = Invoke-RestMethod ($next+"?format=json") 
+                        if ($RefOnly) {
+                            $r.entries | select -First $cnt | Set-PSType EventStore.EventRef
+                        } else {
+                            $r.entries | select -First $cnt | Get-ESEvent
+                        }
+                        $cnt = $cnt - 20
+                    }
                 }
             }
             All {
@@ -113,6 +137,26 @@
                     $cnt = $cnt - 20
                 }
 
+            }
+            Category {
+                $categoryId = "`$category-$category"
+                $streams = Get-ESEvent $categoryId -Count $Count | ? EventType -EQ StreamCreated | % Data
+                $remainingCount = $Count
+                $streams | % { 
+                    if ($remainingCount -eq 0) {
+                        return
+                    } else {
+                        Get-ESEvent $_ -Count $remainingCount 
+                    }
+                    } | % { 
+                    if ($remainingCount -eq 0) {
+                        return
+                    } else {
+                        $remainingCount = $remainingCount - 1
+                        $_
+                    }
+
+                }
             }
             Event {
                 $ProgressPreference = "SilentlyContinue";
